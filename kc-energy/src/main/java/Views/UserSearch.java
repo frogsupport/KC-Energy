@@ -1,24 +1,31 @@
 package Views;
+
+import DataAccess.UserRepository;
 import Models.Customer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import static DataAccess.UserRepository.GetCustomers;
 
-public class UserSearch extends JFrame {
+public class UserSearch extends JFrame implements ActionListener {
 
+    private JButton createButton, searchButton, viewButton, editButton, deleteButton;
     private JTextField searchField;
-    private JButton searchButton;
-    private JList<String> userList;
+    private JList<String> customerJList;
+    private ArrayList<Customer> customers;
+    private String[] customersArray;
     private DefaultTableModel customerTableModel;
     private JTable customerTable;
+    Container contentPane;
 
-    public UserSearch(ArrayList<Customer> customers) {
-        setTitle("User Search");
-        setSize(900, 500);
+    public UserSearch() {
+        setTitle("KC Energy - Search Customers");
+        setSize(550, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -29,42 +36,93 @@ public class UserSearch extends JFrame {
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
 
+        // Create user list
+        customers = GetCustomers();
         String[] column_names =
                 {
-                        "Customer Id",
                         "Name",
                         "Phone Number",
-                        "Address",
-                        "Current Tariff",
-                        "Energy Rate",
-                        "Meter Type"
+                        "Address"
                 };
 
-        customerTableModel = new DefaultTableModel(column_names, 0);
-        for (Customer customer : customers) {
-            customerTableModel.addRow(customer.getRow());
+        customerTableModel = new DefaultTableModel(column_names, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
+        };
+
+        customersArray = new String[customers.size()];
+        for (int i = 0; i < customers.size(); i++) {
+            customersArray[i] = customers.get(i).toString();
+            customerTableModel.addRow(customers.get(i).getRow());
         }
 
+        customerJList = new JList<>(customersArray);
         customerTable = new JTable(customerTableModel);
+        customerTable.setSelectionMode(0);
         JScrollPane scrollPane = new JScrollPane(customerTable);
 
+        // Create bottom buttons
+        JPanel bottomPanel = new JPanel();
+        createButton = new JButton("Create Customer");
+        createButton.addActionListener(this);
+        viewButton = new JButton("View Customer");
+        viewButton.addActionListener(this);
+        editButton = new JButton("Edit Customer");
+        editButton.addActionListener(this);
+        deleteButton = new JButton("Delete Customer");
+        deleteButton.addActionListener(this);
+        bottomPanel.add(createButton);
+        bottomPanel.add(viewButton);
+        bottomPanel.add(editButton);
+        bottomPanel.add(deleteButton);
+
         // Add components to window
-        Container contentPane = getContentPane();
+        contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
         contentPane.add(searchPanel, BorderLayout.NORTH);
         contentPane.add(scrollPane, BorderLayout.CENTER);
+        contentPane.add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        ArrayList<Customer> customers = GetCustomers();
-
-        for (int i = 0; i < customers.size(); i++) {
-            System.out.println(customers.get(i).CustomerName);
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Get the selected customer if selected
+        Customer selectedCustomer = null;
+        if (customerTable.getSelectedRow() != -1) {
+            selectedCustomer = customers.get(customerTable.getSelectedRow());
         }
 
-        // Create and show the window
-        new UserSearch(customers);
+        // Switch buttons
+        if (e.getSource() == createButton) {
+            new CreateUser();
+            dispose();
+        } else if (e.getSource() == viewButton) {
+            // Code to view selected user
+        } else if ((e.getSource() == editButton) && (selectedCustomer != null)) {
+            new EditUser(selectedCustomer);
+            dispose();
+        } else if ((e.getSource() == deleteButton) && (selectedCustomer != null)) {
+            deleteCustomer(selectedCustomer.CustomerId);
+        }
+    }
+
+    public void deleteCustomer(int customerId) {
+        if (UserRepository.DeleteCustomer(customerId)) {
+            JOptionPane.showMessageDialog(contentPane, "Customer successfully deleted");
+            new UserSearch();
+            dispose();
+        }
+        else {
+            JOptionPane.showMessageDialog(contentPane, "Customer deletion failed");
+        }
+    }
+
+    public static void main(String[] args) {
+        new UserSearch();
     }
 }

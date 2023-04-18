@@ -11,9 +11,10 @@ public class CreateUser extends JFrame implements ActionListener {
 
     private JButton backButton, createButton;
     private JTextField nameField, phoneField, addressField, tariffField, energyRateField, meterField;
+    Container contentPane;
 
     public CreateUser() {
-        setTitle("Create User");
+        setTitle("KC Energy - Create Customer");
         setSize(500, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,11 +66,11 @@ public class CreateUser extends JFrame implements ActionListener {
         meterPanel.add(meterField);
 
         // Create the create button
-        createButton = new JButton("Create User");
+        createButton = new JButton("Create Customer");
         createButton.addActionListener(this);
 
         // Add components to window
-        Container contentPane = getContentPane();
+        contentPane = getContentPane();
         contentPane.setLayout(new GridLayout(8, 1));
         contentPane.add(backButton);
         contentPane.add(namePanel);
@@ -87,30 +88,36 @@ public class CreateUser extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             // Code to return to previous page
-            new UserSearchNew();
+            new UserSearch();
             dispose();
         } else if (e.getSource() == createButton) {
-            String name = nameField.getText();
-            String phone = phoneField.getText();
-            String address = addressField.getText();
-            double tariff = Double.parseDouble(tariffField.getText());
-            double energyRate = Double.parseDouble(energyRateField.getText());
-            String meterType = meterField.getText();
+            try {
+                String name = nameField.getText();
+                String phone = phoneField.getText();
+                String address = addressField.getText();
+                double tariff = Double.parseDouble(tariffField.getText());
+                double energyRate = Double.parseDouble(energyRateField.getText());
+                String meterType = meterField.getText();
 
-            Customer newCustomer = new Customer(
-                    -1,
-                    name,
-                    phone,
-                    address,
-                    tariff,
-                    energyRate,
-                    meterType);
+                Customer newCustomer = new Customer(
+                        -1,
+                        name,
+                        phone,
+                        address,
+                        tariff,
+                        energyRate,
+                        meterType);
 
-            UserRepository.CreateCustomer(newCustomer);
+                 if (UserRepository.CreateCustomer(newCustomer)) {
+                     JOptionPane.showMessageDialog(contentPane, "Customer successfully created");
+                     new UserSearch();
+                     dispose();
+                 }
+            }
+            catch (Exception ex) {
+                System.out.println(ex.getMessage());
+                JOptionPane.showMessageDialog(contentPane, "Customer creation failed");
+            }
         }
-    }
-
-    public static void main(String[] args) {
-        new CreateUser();
     }
 }
