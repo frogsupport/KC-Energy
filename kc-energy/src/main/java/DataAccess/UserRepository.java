@@ -11,6 +11,39 @@ import java.util.ArrayList;
 import static DataAccess.DbConnection.dbCon;
 
 public class UserRepository {
+    public static void CreateCustomer(Customer customer) {
+        try {
+            // Create a connection to the database.
+            Connection connection = dbCon();
+
+            // create JDBC statement object
+            Statement statement = connection.createStatement();
+
+            // prepare SQL query
+            String query = String.format(
+                    "INSERT INTO kc_energy.customer (customer_name, phone_number, current_address, "
+                    + "current_tariff, current_energy_rate, meter_type) "
+                    + "VALUES ('%s', '%s', '%s', %s, %s, '%s');",
+                    customer.CustomerName,
+                    customer.PhoneNumber,
+                    customer.CurrentAddress,
+                    customer.CurrentTariff,
+                    customer.CurrentEnergyRate,
+                    customer.MeterType);
+
+            // send and execute SQL query in Database software
+            int result = statement.executeUpdate(query);
+
+            if (result == 1)
+                System.out.println("added successfully");
+            else
+                System.out.println("failed");
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
     public static ArrayList<Customer> GetCustomers() {
         ArrayList<Customer> customers = new ArrayList<>();
 
@@ -48,16 +81,6 @@ public class UserRepository {
                         meterType);
 
                 customers.add(customer);
-
-                System.out.printf("%s %s %s %s %s %s %s %s\n",
-                        customerId,
-                        customerName,
-                        phoneNumber,
-                        currentAddress,
-                        currentTariff,
-                        currentEnergyRate,
-                        meterType,
-                        deletedDate);
             }
 
             // close connection

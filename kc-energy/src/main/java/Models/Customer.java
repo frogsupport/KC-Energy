@@ -24,27 +24,32 @@ public class Customer {
     public Vector<String> getRow(){
         Vector<String> customerRow = new Vector<String>();
 
-        customerRow.add(Integer.toString(CustomerId));
+//        customerRow.add(Integer.toString(CustomerId));
         customerRow.add(CustomerName);
         customerRow.add(PhoneNumber);
         customerRow.add(CurrentAddress);
-        customerRow.add(Double.toString(CurrentTariff));
-        customerRow.add(Double.toString(CurrentEnergyRate));
-        customerRow.add(MeterType);
+//        customerRow.add(Double.toString(CurrentTariff));
+//        customerRow.add(Double.toString(CurrentEnergyRate));
+//        customerRow.add(MeterType);
 
         return customerRow;
     }
 
+    public void printCustomer() {
+        System.out.printf("%s %s %s %s %s %s %s %s\n",
+                CustomerId,
+                CustomerName,
+                PhoneNumber,
+                CurrentAddress,
+                CurrentTariff,
+                CurrentEnergyRate,
+                MeterType);
+    }
+
     @Override
     public String toString() {
-        return "Customer{" +
-                "CustomerId=" + CustomerId +
-                ", CustomerName='" + CustomerName + '\'' +
-                ", PhoneNumber='" + PhoneNumber + '\'' +
-                ", CurrentAddress='" + CurrentAddress + '\'' +
-                ", CurrentTariff=" + CurrentTariff +
-                ", CurrentEnergyRate=" + CurrentEnergyRate +
-                ", MeterType='" + MeterType + '\'' +
-                '}';
+        return "Customer Name: " + CustomerName
+                + " Address: " + CurrentAddress
+                + " Phone Number: " + PhoneNumber;
     }
 }
