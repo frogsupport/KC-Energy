@@ -7,15 +7,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CreateUser extends JFrame implements ActionListener {
+public class CreateUserWindow extends JFrame implements ActionListener {
 
     private JButton backButton, createButton;
     private JTextField nameField, phoneField, addressField, tariffField, energyRateField, meterField;
     Container contentPane;
 
-    public CreateUser() {
+    public CreateUserWindow() {
         setTitle("KC Energy - Create Customer");
-        setSize(500, 400);
+        setSize(550, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -88,7 +88,7 @@ public class CreateUser extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             // Code to return to previous page
-            new UserSearch();
+            new DashboardWindow();
             dispose();
         } else if (e.getSource() == createButton) {
             try {
@@ -110,7 +110,7 @@ public class CreateUser extends JFrame implements ActionListener {
 
                  if (UserRepository.CreateCustomer(newCustomer)) {
                      JOptionPane.showMessageDialog(contentPane, "Customer successfully created");
-                     new UserSearch();
+                     new DashboardWindow();
                      dispose();
                  }
             }

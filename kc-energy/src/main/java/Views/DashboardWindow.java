@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import static DataAccess.UserRepository.GetCustomers;
 
-public class UserSearch extends JFrame implements ActionListener {
+public class DashboardWindow extends JFrame implements ActionListener {
 
     private JButton createButton, searchButton, viewButton, editButton, deleteButton;
     private JTextField searchField;
@@ -23,7 +23,7 @@ public class UserSearch extends JFrame implements ActionListener {
     private JTable customerTable;
     Container contentPane;
 
-    public UserSearch() {
+    public DashboardWindow() {
         setTitle("KC Energy - Search Customers");
         setSize(550, 400);
         setLocationRelativeTo(null);
@@ -99,12 +99,14 @@ public class UserSearch extends JFrame implements ActionListener {
 
         // Switch buttons
         if (e.getSource() == createButton) {
-            new CreateUser();
+            new CreateUserWindow();
             dispose();
-        } else if (e.getSource() == viewButton) {
+        } else if ((e.getSource() == viewButton) && (selectedCustomer != null)) {
             // Code to view selected user
+            new BillsWindow(selectedCustomer);
+            dispose();
         } else if ((e.getSource() == editButton) && (selectedCustomer != null)) {
-            new EditUser(selectedCustomer);
+            new EditUserWindow(selectedCustomer);
             dispose();
         } else if ((e.getSource() == deleteButton) && (selectedCustomer != null)) {
             deleteCustomer(selectedCustomer.CustomerId);
@@ -114,7 +116,7 @@ public class UserSearch extends JFrame implements ActionListener {
     public void deleteCustomer(int customerId) {
         if (UserRepository.DeleteCustomer(customerId)) {
             JOptionPane.showMessageDialog(contentPane, "Customer successfully deleted");
-            new UserSearch();
+            new DashboardWindow();
             dispose();
         }
         else {
@@ -123,6 +125,6 @@ public class UserSearch extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new UserSearch();
+        new DashboardWindow();
     }
 }

@@ -7,18 +7,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class EditUser extends JFrame implements ActionListener {
+public class EditUserWindow extends JFrame implements ActionListener {
 
     private Customer customer;
     private JButton backButton, createButton;
     private JTextField nameField, phoneField, addressField, tariffField, energyRateField, meterField;
-    Container contentPane;
+    private Container contentPane;
 
-    public EditUser(Customer selectedCustomer) {
+    public EditUserWindow(Customer selectedCustomer) {
         customer = selectedCustomer;
 
         setTitle("KC Energy - Edit Customer");
-        setSize(500, 400);
+        setSize(550, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -99,7 +99,7 @@ public class EditUser extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             // Code to return to previous page
-            new UserSearch();
+            new DashboardWindow();
             dispose();
         } else if (e.getSource() == createButton) {
             try {
@@ -121,7 +121,7 @@ public class EditUser extends JFrame implements ActionListener {
 
                 if (UserRepository.UpdateCustomer(updatedCustomer)) {
                     JOptionPane.showMessageDialog(contentPane, "Customer successfully updated");
-                    new UserSearch();
+                    new DashboardWindow();
                     dispose();
                 }
             }
