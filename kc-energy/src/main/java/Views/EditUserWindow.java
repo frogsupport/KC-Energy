@@ -22,12 +22,25 @@ public class EditUserWindow extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        System.out.println(customer.toString());
-
         // Create return button
         backButton = new JButton("Return to Previous Page");
         backButton.addActionListener(this);
 
+        // Create the create button
+        createButton = new JButton("Save");
+        createButton.addActionListener(this);
+
+        // Add components to window
+        contentPane = getContentPane();
+        contentPane.setLayout(new BorderLayout());
+        contentPane.add(backButton, BorderLayout.NORTH);
+        contentPane.add(buildEditUserWindow(), BorderLayout.CENTER);
+        contentPane.add(createButton, BorderLayout.SOUTH);
+
+        setVisible(true);
+    }
+
+    public JPanel buildEditUserWindow() {
         // Create name field
         JPanel namePanel = new JPanel();
         JLabel nameLabel = new JLabel("Name:");
@@ -76,23 +89,58 @@ public class EditUserWindow extends JFrame implements ActionListener {
         meterPanel.add(meterLabel);
         meterPanel.add(meterField);
 
-        // Create the create button
-        createButton = new JButton("Save");
-        createButton.addActionListener(this);
+        JPanel editUserPanel = new JPanel();
+        editUserPanel.setLayout(new GridBagLayout());
 
-        // Add components to window
-        contentPane = getContentPane();
-        contentPane.setLayout(new GridLayout(8, 1));
-        contentPane.add(backButton);
-        contentPane.add(namePanel);
-        contentPane.add(phonePanel);
-        contentPane.add(addressPanel);
-        contentPane.add(tariffPanel);
-        contentPane.add(energyRatePanel);
-        contentPane.add(meterPanel);
-        contentPane.add(createButton);
+        // creates a constraints object
+        GridBagConstraints c = new GridBagConstraints();
 
-        setVisible(true);
+        // insets for all components
+        c.insets = new Insets(20, 2, 2, 2);
+
+        // row 0
+        c.gridy = 0;
+        c.gridx = 0;
+        editUserPanel.add(nameLabel, c);
+        c.gridx = 1;
+        editUserPanel.add(nameField, c);
+
+        // row 1
+        c.gridy = 1;
+        c.gridx = 0;
+        editUserPanel.add(phoneLabel, c);
+        c.gridx = 1;
+        editUserPanel.add(phoneField, c);
+
+        // row 2
+        c.gridy = 2;
+        c.gridx = 0;
+        editUserPanel.add(addressLabel, c);
+        c.gridx = 1;
+        editUserPanel.add(addressField, c);
+
+        // row 3
+        c.gridy = 3;
+        c.gridx = 0;
+        editUserPanel.add(meterLabel, c);
+        c.gridx = 1;
+        editUserPanel.add(meterField, c);
+
+        // row 4
+        c.gridy = 4;
+        c.gridx = 0;
+        editUserPanel.add(energyRateLabel, c);
+        c.gridx = 1;
+        editUserPanel.add(energyRateField, c);
+
+        // row 5
+        c.gridy = 5;
+        c.gridx = 0;
+        editUserPanel.add(tariffLabel, c);
+        c.gridx = 1;
+        editUserPanel.add(tariffField, c);
+
+        return editUserPanel;
     }
 
     @Override

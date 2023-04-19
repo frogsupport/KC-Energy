@@ -23,65 +23,96 @@ public class CreateUserWindow extends JFrame implements ActionListener {
         backButton = new JButton("Return to Previous Page");
         backButton.addActionListener(this);
 
-        // Create name field
-        JPanel namePanel = new JPanel();
-        JLabel nameLabel = new JLabel("Name:");
-        nameField = new JTextField(20);
-        namePanel.add(nameLabel);
-        namePanel.add(nameField);
-
-        // Create phone field
-        JPanel phonePanel = new JPanel();
-        JLabel phoneLabel = new JLabel("Phone Number:");
-        phoneField = new JTextField(20);
-        phonePanel.add(phoneLabel);
-        phonePanel.add(phoneField);
-
-        // Create address field
-        JPanel addressPanel = new JPanel();
-        JLabel addressLabel = new JLabel("Address:");
-        addressField = new JTextField(20);
-        addressPanel.add(addressLabel);
-        addressPanel.add(addressField);
-
-        // Create tariff field
-        JPanel tariffPanel = new JPanel();
-        JLabel tariffLabel = new JLabel("Tariff:");
-        tariffField = new JTextField(20);
-        tariffPanel.add(tariffLabel);
-        tariffPanel.add(tariffField);
-
-        // Create energy rate field
-        JPanel energyRatePanel = new JPanel();
-        JLabel energyRateLabel = new JLabel("Energy Rate:");
-        energyRateField = new JTextField(20);
-        energyRatePanel.add(energyRateLabel);
-        energyRatePanel.add(energyRateField);
-
-        // Create meter type field
-        JPanel meterPanel = new JPanel();
-        JLabel meterLabel = new JLabel("Meter Type:");
-        meterField = new JTextField(20);
-        meterPanel.add(meterLabel);
-        meterPanel.add(meterField);
-
         // Create the create button
         createButton = new JButton("Create Customer");
         createButton.addActionListener(this);
 
-        // Add components to window
         contentPane = getContentPane();
-        contentPane.setLayout(new GridLayout(8, 1));
-        contentPane.add(backButton);
-        contentPane.add(namePanel);
-        contentPane.add(phonePanel);
-        contentPane.add(addressPanel);
-        contentPane.add(tariffPanel);
-        contentPane.add(energyRatePanel);
-        contentPane.add(meterPanel);
-        contentPane.add(createButton);
+        contentPane.setLayout(new BorderLayout());
+        contentPane.add(backButton, BorderLayout.NORTH);
+        contentPane.add(buildcreateUserWindow(), BorderLayout.CENTER);
+        contentPane.add(createButton, BorderLayout.SOUTH);
 
         setVisible(true);
+    }
+
+    public JPanel buildcreateUserWindow() {
+        // Create name field
+        JLabel nameLabel = new JLabel("Name:");
+        nameField = new JTextField(20);
+
+        // Create phone field
+        JLabel phoneLabel = new JLabel("Phone Number:");
+        phoneField = new JTextField(20);
+
+        // Create address field
+        JLabel addressLabel = new JLabel("Address:");
+        addressField = new JTextField(20);
+
+        // Create tariff field
+        JLabel tariffLabel = new JLabel("Tariff:");
+        tariffField = new JTextField(20);
+
+        // Create energy rate field
+        JLabel energyRateLabel = new JLabel("Energy Rate:");
+        energyRateField = new JTextField(20);
+
+        // Create meter type field
+        JLabel meterLabel = new JLabel("Meter Type:");
+        meterField = new JTextField(20);
+
+        JPanel createUserPanel = new JPanel();
+        createUserPanel.setLayout(new GridBagLayout());
+
+        // creates a constraints object
+        GridBagConstraints c = new GridBagConstraints();
+
+        // insets for all components
+        c.insets = new Insets(20, 2, 2, 2);
+
+        // row 0
+        c.gridy = 0;
+        c.gridx = 0;
+        createUserPanel.add(nameLabel, c);
+        c.gridx = 1;
+        createUserPanel.add(nameField, c);
+
+        // row 1
+        c.gridy = 1;
+        c.gridx = 0;
+        createUserPanel.add(phoneLabel, c);
+        c.gridx = 1;
+        createUserPanel.add(phoneField, c);
+
+        // row 2
+        c.gridy = 2;
+        c.gridx = 0;
+        createUserPanel.add(addressLabel, c);
+        c.gridx = 1;
+        createUserPanel.add(addressField, c);
+
+        // row 3
+        c.gridy = 3;
+        c.gridx = 0;
+        createUserPanel.add(meterLabel, c);
+        c.gridx = 1;
+        createUserPanel.add(meterField, c);
+
+        // row 4
+        c.gridy = 4;
+        c.gridx = 0;
+        createUserPanel.add(energyRateLabel, c);
+        c.gridx = 1;
+        createUserPanel.add(energyRateField, c);
+
+        // row 5
+        c.gridy = 5;
+        c.gridx = 0;
+        createUserPanel.add(tariffLabel, c);
+        c.gridx = 1;
+        createUserPanel.add(tariffField, c);
+
+        return createUserPanel;
     }
 
     @Override
