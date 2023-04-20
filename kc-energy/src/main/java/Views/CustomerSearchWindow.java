@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import static DataAccess.UserRepository.GetCustomers;
 
-public class DashboardWindow extends JFrame implements ActionListener {
+public class CustomerSearchWindow extends JFrame implements ActionListener {
 
     private JButton createButton, searchButton, viewButton, editButton, deleteButton;
     private JTextField searchField;
@@ -23,7 +23,7 @@ public class DashboardWindow extends JFrame implements ActionListener {
     private JTable customerTable;
     Container contentPane;
 
-    public DashboardWindow() {
+    public CustomerSearchWindow() {
         setTitle("KC Energy - Search Customers");
         setSize(550, 400);
         setLocationRelativeTo(null);
@@ -103,7 +103,7 @@ public class DashboardWindow extends JFrame implements ActionListener {
             dispose();
         } else if ((e.getSource() == viewButton) && (selectedCustomer != null)) {
             // Code to view selected user
-            new BillsWindow(selectedCustomer);
+            new BillsDashboardWindow(selectedCustomer);
             dispose();
         } else if ((e.getSource() == editButton) && (selectedCustomer != null)) {
             new EditUserWindow(selectedCustomer);
@@ -116,7 +116,7 @@ public class DashboardWindow extends JFrame implements ActionListener {
     public void deleteCustomer(int customerId) {
         if (UserRepository.DeleteCustomer(customerId)) {
             JOptionPane.showMessageDialog(contentPane, "Customer successfully deleted");
-            new DashboardWindow();
+            new CustomerSearchWindow();
             dispose();
         }
         else {
@@ -125,6 +125,6 @@ public class DashboardWindow extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new DashboardWindow();
+        new CustomerSearchWindow();
     }
 }

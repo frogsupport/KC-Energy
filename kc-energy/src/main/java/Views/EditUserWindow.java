@@ -23,7 +23,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create return button
-        backButton = new JButton("Return to Previous Page");
+        backButton = new JButton("Return to Dashbaord");
         backButton.addActionListener(this);
 
         // Create the create button
@@ -147,7 +147,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             // Code to return to previous page
-            new DashboardWindow();
+            new CustomerSearchWindow();
             dispose();
         } else if (e.getSource() == createButton) {
             try {
@@ -169,7 +169,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
 
                 if (UserRepository.UpdateCustomer(updatedCustomer)) {
                     JOptionPane.showMessageDialog(contentPane, "Customer successfully updated");
-                    new DashboardWindow();
+                    new CustomerSearchWindow();
                     dispose();
                 }
             }

@@ -1,21 +1,32 @@
 package Views;
 
 import Models.Customer;
+import Models.MonthlyBill;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-public class BillsWindow extends JFrame implements ActionListener {
+import static DataAccess.MonthlyBillsRepository.GetCustomerBills;
+import static DataAccess.UserRepository.GetCustomers;
 
-    private JButton backButton, editButton;
+public class BillsDashboardWindow extends JFrame implements ActionListener {
+
+    private JButton backButton, editButton, addBillButton, viewBillButton;
     private Container contentPane;
     private Customer customer;
     private JTextField nameField, phoneField, addressField, tariffField, energyRateField, meterField;
+    private DefaultTableModel billsTableModel;
+    private ArrayList<MonthlyBill> bills;
+    JList<String> billsJList;
+    private JTable billsJTable;
+    private String[] billsArray;
     private final int FIELD_WIDTH = 10;
 
-    public BillsWindow(Customer selectedCustomer) {
+    public BillsDashboardWindow(Customer selectedCustomer) {
         customer = selectedCustomer;
 
         setTitle("KC Energy - View Customer");
@@ -27,49 +38,55 @@ public class BillsWindow extends JFrame implements ActionListener {
         contentPane.setLayout(new BorderLayout());
 
         contentPane.add(buildUserDisplayPanel(), BorderLayout.NORTH);
-
-        contentPane.add(buildbottomPabel(), BorderLayout.SOUTH);
+        contentPane.add(buildBillDisplayPanel(), BorderLayout.CENTER);
+        contentPane.add(buildBottomPanel(), BorderLayout.SOUTH);
 
         setVisible(true);
     }
 
-    public JPanel buildbottomPabel() {
-        // Create the Add Bill button
-        JButton addBillButton = new JButton("Add Bill");
-        addBillButton.addActionListener(this);
+    public JScrollPane buildBillDisplayPanel() {
+        // Create bills list
+        bills = GetCustomerBills(customer.CustomerId);
+        String[] column_names =
+                {
+                        "Billing Period",
+                        "Amount Due",
+                        "Payment Status"
+                };
 
-        // Create the View bill buttons
-        JButton viewBillButton = new JButton("View Bill");
-        addBillButton.addActionListener(this);
+        billsTableModel = new DefaultTableModel(column_names, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
+        };
 
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.setLayout(new GridBagLayout());
+        billsArray = new String[bills.size()];
+        for (int i = 0; i < bills.size(); i++) {
+            billsArray[i] = bills.get(i).toString();
+            billsTableModel.addRow(bills.get(i).getRow());
+        }
 
-        // creates a constraints object
-        GridBagConstraints c = new GridBagConstraints();
+        billsJList = new JList<>(billsArray);
+        billsJTable = new JTable(billsTableModel);
+        billsJTable.setSelectionMode(0);
+        JScrollPane scrollPane = new JScrollPane(billsJTable);
 
-        // insets for all components
-        c.insets = new Insets(2, 2, 2, 2);
-
-        // Add all components to panel //
-        // row 0
-        c.gridy = 0;
-        c.gridx = 0;
-        bottomPanel.add(addBillButton, c);
-        c.gridx = 1;
-        bottomPanel.add(viewBillButton, c);
-
-        return bottomPanel;
+        return scrollPane;
     }
 
     public JPanel buildUserDisplayPanel() {
         // Create return button
-        backButton = new JButton("Return to Previous Page");
+        backButton = new JButton("Return to Dashboard");
         backButton.addActionListener(this);
 
         // Create Edit User Button
         editButton = new JButton("Edit Customer");
         editButton.addActionListener(this);
+
+        // Create Customer Information Label
+        JLabel customerInformationLabel = new JLabel("Customer Information:");
 
         // Create name field
         JLabel nameLabel = new JLabel("Name:");
@@ -107,16 +124,17 @@ public class BillsWindow extends JFrame implements ActionListener {
         meterField.setText(customer.MeterType);
         meterField.setEditable(false);
 
+        // Create Bills Table Label
+        JLabel billsTableLabel = new JLabel("Customer Bills:");
+
         JPanel userDisplayPanel = new JPanel();
         userDisplayPanel.setLayout(new GridBagLayout());
 
         // creates a constraints object
         GridBagConstraints c = new GridBagConstraints();
 
-        // insets for all components
+        // insets
         c.insets = new Insets(2, 2, 2, 2);
-
-        // Add all components to panel //
 
         // row 0
         c.gridy = 0;
@@ -125,8 +143,15 @@ public class BillsWindow extends JFrame implements ActionListener {
         c.gridx = 1;
         userDisplayPanel.add(editButton, c);
 
-        // row 1
+        // Row 1
+        c.insets = new Insets(10, 2, 10, 2);
         c.gridy = 1;
+        c.gridx = 0;
+        userDisplayPanel.add(customerInformationLabel, c);
+
+        // row 2
+        c.insets = new Insets(2, 2, 2, 2);
+        c.gridy = 2;
         c.gridx = 0;
         userDisplayPanel.add(nameLabel, c);
         c.gridx = 1;
@@ -136,8 +161,8 @@ public class BillsWindow extends JFrame implements ActionListener {
         c.gridx = 3;
         userDisplayPanel.add(phoneField, c);
 
-        // row 2
-        c.gridy = 2;
+        // row 3
+        c.gridy = 3;
         c.gridx = 0;
         userDisplayPanel.add(addressLabel, c);
         c.gridx = 1;
@@ -147,8 +172,8 @@ public class BillsWindow extends JFrame implements ActionListener {
         c.gridx = 3;
         userDisplayPanel.add(meterField, c);
 
-        // row 3
-        c.gridy = 3;
+        // row 4
+        c.gridy = 4;
         c.gridx = 0;
         userDisplayPanel.add(energyRateLabel, c);
         c.gridx = 1;
@@ -158,17 +183,55 @@ public class BillsWindow extends JFrame implements ActionListener {
         c.gridx = 3;
         userDisplayPanel.add(tariffField, c);
 
+        // row 5
+        c.insets = new Insets(20, 2, 10, 2);
+        c.gridy = 5;
+        c.gridx = 0;
+        userDisplayPanel.add(billsTableLabel, c);
+
         return userDisplayPanel;
+    }
+
+    public JPanel buildBottomPanel() {
+        // Create the Add Bill button
+        addBillButton = new JButton("Add Bill");
+        addBillButton.addActionListener(this);
+
+        // Create the View bill buttons
+        viewBillButton = new JButton("View Bill");
+        addBillButton.addActionListener(this);
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new GridBagLayout());
+
+        // creates a constraints object
+        GridBagConstraints c = new GridBagConstraints();
+
+        // insets for all components
+        c.insets = new Insets(2, 2, 2, 2);
+
+        // Add all components to panel //
+        // row 0
+        c.gridy = 0;
+        c.gridx = 0;
+        bottomPanel.add(addBillButton, c);
+        c.gridx = 1;
+        bottomPanel.add(viewBillButton, c);
+
+        return bottomPanel;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         // Code to return to previous page
         if (e.getSource() == backButton) {
-            new DashboardWindow();
+            new CustomerSearchWindow();
             dispose();
         } else if ((e.getSource() == editButton)) {
             new EditUserWindow(customer);
+            dispose();
+        } else if (e.getSource() == addBillButton) {
+            new AddBillWindow(customer);
             dispose();
         }
     }

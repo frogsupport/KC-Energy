@@ -1,4 +1,5 @@
 package Views;
+
 import DataAccess.UserRepository;
 import Models.Customer;
 
@@ -119,7 +120,7 @@ public class CreateUserWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             // Code to return to previous page
-            new DashboardWindow();
+            new CustomerSearchWindow();
             dispose();
         } else if (e.getSource() == createButton) {
             try {
@@ -141,7 +142,7 @@ public class CreateUserWindow extends JFrame implements ActionListener {
 
                  if (UserRepository.CreateCustomer(newCustomer)) {
                      JOptionPane.showMessageDialog(contentPane, "Customer successfully created");
-                     new DashboardWindow();
+                     new CustomerSearchWindow();
                      dispose();
                  }
             }
