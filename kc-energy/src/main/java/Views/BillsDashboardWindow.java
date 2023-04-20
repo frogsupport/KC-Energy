@@ -1,5 +1,6 @@
 package Views;
 
+import DataAccess.UserRepository;
 import Models.Customer;
 import Models.MonthlyBill;
 
@@ -11,11 +12,11 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import static DataAccess.MonthlyBillsRepository.GetCustomerBills;
-import static DataAccess.UserRepository.GetCustomers;
 
 public class BillsDashboardWindow extends JFrame implements ActionListener {
 
-    private JButton backButton, editButton, addBillButton, viewBillButton;
+    private JButton backButton, editButton,
+            addBillButton, viewBillButton,deleteButton, addPaymentButton;
     private Container contentPane;
     private Customer customer;
     private JTextField nameField, phoneField, addressField, tariffField, energyRateField, meterField;
@@ -85,6 +86,10 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         editButton = new JButton("Edit Customer");
         editButton.addActionListener(this);
 
+        // Create user delete button
+        deleteButton = new JButton("Delete Customer");
+        deleteButton.addActionListener(this);
+
         // Create Customer Information Label
         JLabel customerInformationLabel = new JLabel("Customer Information:");
 
@@ -142,6 +147,8 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         userDisplayPanel.add(backButton, c);
         c.gridx = 1;
         userDisplayPanel.add(editButton, c);
+        c.gridx = 2;
+        userDisplayPanel.add(deleteButton, c);
 
         // Row 1
         c.insets = new Insets(10, 2, 10, 2);
@@ -197,6 +204,10 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         addBillButton = new JButton("Add Bill");
         addBillButton.addActionListener(this);
 
+        // Add payment button
+        addPaymentButton = new JButton("Add Payment");
+        addPaymentButton.addActionListener(this);
+
         // Create the View bill buttons
         viewBillButton = new JButton("View Bill");
         addBillButton.addActionListener(this);
@@ -216,6 +227,8 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         c.gridx = 0;
         bottomPanel.add(addBillButton, c);
         c.gridx = 1;
+        bottomPanel.add(addPaymentButton);
+        c.gridx = 2;
         bottomPanel.add(viewBillButton, c);
 
         return bottomPanel;
@@ -223,6 +236,12 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        // Get the selected customer if selected
+        MonthlyBill selectedBill = null;
+        if (billsJTable.getSelectedRow() != -1) {
+            selectedBill = bills.get(billsJTable.getSelectedRow());
+        }
+
         // Code to return to previous page
         if (e.getSource() == backButton) {
             new CustomerSearchWindow();
@@ -233,6 +252,22 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         } else if (e.getSource() == addBillButton) {
             new AddBillWindow(customer);
             dispose();
+        } else if (e.getSource() == deleteButton) {
+            deleteCustomer(customer.CustomerId);
+        } else if ((e.getSource() == addPaymentButton) && (selectedBill != null)) {
+            new AddPaymentWindow(customer, selectedBill);
+            dispose();
+        }
+    }
+
+    public void deleteCustomer(int customerId) {
+        if (UserRepository.DeleteCustomer(customerId)) {
+            JOptionPane.showMessageDialog(contentPane, "Customer successfully deleted");
+            new CustomerSearchWindow();
+            dispose();
+        }
+        else {
+            JOptionPane.showMessageDialog(contentPane, "Customer deletion failed");
         }
     }
 }
