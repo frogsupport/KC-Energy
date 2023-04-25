@@ -44,6 +44,7 @@ public class MonthlyBill {
         Vector<String> billRow = new Vector<String>();
 
         billRow.add(Period);
+        billRow.add(Double.toString(AmountReceived));
         billRow.add(Double.toString(AmountDue));
 
         String paymentStatus = "Unpaid";

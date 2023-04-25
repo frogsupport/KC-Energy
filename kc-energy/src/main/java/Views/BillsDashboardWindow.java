@@ -51,6 +51,7 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         String[] column_names =
                 {
                         "Billing Period",
+                        "Amount Received",
                         "Amount Due",
                         "Payment Status"
                 };
@@ -244,7 +245,7 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
 
         // Code to return to previous page
         if (e.getSource() == backButton) {
-            new CustomerSearchWindow();
+            new CustomerSearchWindow(UserRepository.GetCustomers());
             dispose();
         } else if ((e.getSource() == editButton)) {
             new EditUserWindow(customer);
@@ -265,7 +266,7 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
     public void deleteCustomer(int customerId) {
         if (UserRepository.DeleteCustomer(customerId)) {
             JOptionPane.showMessageDialog(contentPane, "Customer successfully deleted");
-            new CustomerSearchWindow();
+            new CustomerSearchWindow(UserRepository.GetCustomers());
             dispose();
         }
         else {

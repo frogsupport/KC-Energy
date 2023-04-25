@@ -120,7 +120,7 @@ public class CreateUserWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             // Code to return to previous page
-            new CustomerSearchWindow();
+            new CustomerSearchWindow(UserRepository.GetCustomers());
             dispose();
         } else if (e.getSource() == createButton) {
             try {
@@ -142,7 +142,7 @@ public class CreateUserWindow extends JFrame implements ActionListener {
 
                  if (UserRepository.CreateCustomer(newCustomer)) {
                      JOptionPane.showMessageDialog(contentPane, "Customer successfully created");
-                     new CustomerSearchWindow();
+                     new CustomerSearchWindow(UserRepository.GetCustomers());
                      dispose();
                  }
             }

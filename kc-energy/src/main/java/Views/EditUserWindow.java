@@ -147,7 +147,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             // Code to return to previous page
-            new CustomerSearchWindow();
+            new CustomerSearchWindow(UserRepository.GetCustomers());
             dispose();
         } else if (e.getSource() == createButton) {
             try {
@@ -169,7 +169,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
 
                 if (UserRepository.UpdateCustomer(updatedCustomer)) {
                     JOptionPane.showMessageDialog(contentPane, "Customer successfully updated");
-                    new CustomerSearchWindow();
+                    new CustomerSearchWindow(UserRepository.GetCustomers());
                     dispose();
                 }
             }

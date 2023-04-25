@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import static DataAccess.UserRepository.GetCustomers;
+import static DataAccess.UserRepository.GetCustomersByName;
 
 public class CustomerSearchWindow extends JFrame implements ActionListener {
 
@@ -23,7 +24,8 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
     private JTable customerTable;
     Container contentPane;
 
-    public CustomerSearchWindow() {
+    public CustomerSearchWindow(ArrayList<Customer> customers) {
+        this.customers = customers;
         setTitle("KC Energy - Search Customers");
         setSize(550, 400);
         setLocationRelativeTo(null);
@@ -33,11 +35,11 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
         JPanel searchPanel = new JPanel();
         searchField = new JTextField(20);
         searchButton = new JButton("Search");
+        searchButton.addActionListener(this);
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
 
         // Create user list
-        customers = GetCustomers();
         String[] column_names =
                 {
                         "Name",
@@ -110,13 +112,19 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
             dispose();
         } else if ((e.getSource() == deleteButton) && (selectedCustomer != null)) {
             deleteCustomer(selectedCustomer.CustomerId);
+        } else if ((e.getSource() == searchButton) && (searchField.getText().length() > 0)) {
+            new CustomerSearchWindow(GetCustomersByName(searchField.getText()));
+            dispose();
+        } else if ((e.getSource() == searchButton) && (searchField.getText().length() == 0)) {
+            new CustomerSearchWindow(GetCustomers());
+            dispose();
         }
     }
 
     public void deleteCustomer(int customerId) {
         if (UserRepository.DeleteCustomer(customerId)) {
             JOptionPane.showMessageDialog(contentPane, "Customer successfully deleted");
-            new CustomerSearchWindow();
+            new CustomerSearchWindow(GetCustomers());
             dispose();
         }
         else {
@@ -125,6 +133,6 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new CustomerSearchWindow();
+        new CustomerSearchWindow(GetCustomers());
     }
 }
