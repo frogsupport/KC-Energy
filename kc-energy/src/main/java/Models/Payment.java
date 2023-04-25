@@ -12,4 +12,8 @@ public class Payment {
         PaymentId = paymentId;
         PaymentAmount = paymentAmount;
     }
+
+    public String toString() {
+       return "Payment Amount: $" + this.PaymentAmount + "\n";
+    }
 }

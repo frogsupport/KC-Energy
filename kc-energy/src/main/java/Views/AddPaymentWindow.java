@@ -1,8 +1,11 @@
 package Views;
 
+import DataAccess.CustomerPaymentRepository;
+import DataAccess.MonthlyBillsRepository;
 import DataAccess.UserRepository;
 import Models.Customer;
 import Models.MonthlyBill;
+import Models.Payment;
 
 import javax.swing.*;
 import java.awt.*;
@@ -253,7 +256,21 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
             dispose();
         } else if (e.getSource() == createButton) {
             try {
+                int userId = customer.CustomerId;
+                int billId = bill.BillId;
+                double paymentAmount = Double.parseDouble(paymentAmountField.getText());
 
+                Payment payment = new Payment(
+                        userId,
+                        billId,
+                        -1,
+                        paymentAmount);
+
+                if (CustomerPaymentRepository.CreatePayment(payment)) {
+                    JOptionPane.showMessageDialog(contentPane, "Payment success");
+                    new BillsDashboardWindow(customer);
+                    dispose();
+                }
             }
             catch (Exception ex) {
                 System.out.println(ex.getMessage());

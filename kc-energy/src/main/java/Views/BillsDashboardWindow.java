@@ -210,7 +210,7 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
 
         // Create the View bill buttons
         viewBillButton = new JButton("View Bill");
-        addBillButton.addActionListener(this);
+        viewBillButton.addActionListener(this);
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridBagLayout());
@@ -257,6 +257,8 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         } else if ((e.getSource() == addPaymentButton) && (selectedBill != null)) {
             new AddPaymentWindow(customer, selectedBill);
             dispose();
+        } else if ((e.getSource() == viewBillButton) && (selectedBill != null)) {
+            JOptionPane.showMessageDialog(contentPane, selectedBill.printCustomerBill(customer));
         }
     }
 

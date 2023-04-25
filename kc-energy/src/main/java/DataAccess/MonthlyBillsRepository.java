@@ -2,6 +2,7 @@ package DataAccess;
 
 import Models.Customer;
 import Models.MonthlyBill;
+import Models.Payment;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -100,6 +101,39 @@ public class MonthlyBillsRepository {
             }
             else {
                 System.out.println("insert failed");
+                return false;
+            }
+        }
+        catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean AddBillPayment(Payment payment) {
+        try {
+            // Create a connection to the database.
+            Connection connection = dbCon();
+
+            // create JDBC statement object
+            Statement statement = connection.createStatement();
+
+            // prepare SQL query
+            String query = String.format(
+                    "UPDATE kc_energy.monthly_bill SET amount_received = amount_received + %s "
+                            + "WHERE bill_id = %s;",
+                    payment.PaymentAmount,
+                    payment.BillId);
+
+            // send and execute SQL query in Database software
+            int queryResult = statement.executeUpdate(query);
+
+            if (queryResult == 1) {
+                System.out.println("updated successfully");
+                return true;
+            }
+            else {
+                System.out.println("update failed");
                 return false;
             }
         }
