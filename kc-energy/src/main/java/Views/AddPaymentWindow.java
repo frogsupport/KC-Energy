@@ -1,7 +1,6 @@
 package Views;
 
 import DataAccess.CustomerPaymentRepository;
-import DataAccess.MonthlyBillsRepository;
 import DataAccess.UserRepository;
 import Models.Customer;
 import Models.MonthlyBill;
@@ -12,8 +11,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// View to add a payment for a customer
 public class AddPaymentWindow extends JFrame implements ActionListener {
-
     private JButton backButton, createButton;
     private JTextField nameField, phoneField, addressField,
             tariffField, energyRateField, meterField,
@@ -23,14 +22,16 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
     private Container contentPane;
     private Customer customer;
     private MonthlyBill bill;
-    private int FIELD_WIDTH = 10;
 
+    // View to add a payment for a customer
     public AddPaymentWindow(Customer selectedCustomer, MonthlyBill selectedBill) {
+        // Initialize the selcted customer and bill
         customer = selectedCustomer;
-        bill =selectedBill;
+        bill = selectedBill;
 
+        // Initialize the window
         setTitle("KC Energy - Add Payment");
-        setSize(550, 500);
+        setSize(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -42,57 +43,54 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
         createButton = new JButton("Add Payment");
         createButton.addActionListener(this);
 
+        // Set the content pane components
         contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
         contentPane.add(backButton, BorderLayout.NORTH);
-        contentPane.add(buildnformationDisplayPanel(), BorderLayout.CENTER);
+        contentPane.add(buildPaymentInformationDisplayPanel(), BorderLayout.CENTER);
         contentPane.add(createButton, BorderLayout.SOUTH);
 
         setVisible(true);
     }
 
-    public JPanel buildcreateUserWindow() {
-
-        return new JPanel();
-    }
-
-    public JPanel buildnformationDisplayPanel() {
+    // Builds the panel that displays the payment information fields
+    public JPanel buildPaymentInformationDisplayPanel() {
         // Create Customer Information Label
         JLabel customerInformationLabel = new JLabel("Customer Information:");
 
         // Create name field
         JLabel nameLabel = new JLabel("Name:");
-        nameField = new JTextField(FIELD_WIDTH);
+        nameField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         nameField.setText(customer.CustomerName);
         nameField.setEditable(false);
 
         // Create phone field
         JLabel phoneLabel = new JLabel("Phone Number:");
-        phoneField = new JTextField(FIELD_WIDTH);
+        phoneField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         phoneField.setText(customer.PhoneNumber);
         phoneField.setEditable(false);
 
         // Create address field
         JLabel addressLabel = new JLabel("Current Address:");
-        addressField = new JTextField(FIELD_WIDTH);
+        addressField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         addressField.setText(customer.CurrentAddress);
         addressField.setEditable(false);
 
         // Create tariff field
         JLabel currentTariffLabel = new JLabel("Current Tariff:");
-        currentTariffField = new JTextField(FIELD_WIDTH);
+        currentTariffField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         currentTariffField.setText(Double.toString(customer.CurrentTariff));
         currentTariffField.setEditable(false);
 
         // Create energy rate field
         JLabel currentEnergyRateLabel = new JLabel("Current Energy Rate:");
-        currentEnergyRateField = new JTextField(FIELD_WIDTH);
+        currentEnergyRateField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         currentEnergyRateField.setText(Double.toString(customer.CurrentEnergyRate));
         currentEnergyRateField.setEditable(false);
 
         // Create meter type field
         JLabel currentMeterLabel = new JLabel("Current Meter Type:");
-        currentMeterField = new JTextField(FIELD_WIDTH);
+        currentMeterField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         currentMeterField.setText(customer.MeterType);
         currentMeterField.setEditable(false);
 
@@ -101,50 +99,51 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
 
         // Create meter type field
         JLabel billMeterLabel = new JLabel("Meter Type:");
-        meterField = new JTextField(FIELD_WIDTH);
+        meterField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         meterField.setText(bill.MeterType);
         meterField.setEditable(false);
 
         // Create the billing period field
         JLabel periodLabel = new JLabel("Billing Period:");
-        periodField = new JTextField(FIELD_WIDTH);
+        periodField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         periodField.setText(bill.Period);
         periodField.setEditable(false);
 
         // Create tariff field
         JLabel billTariffLabel = new JLabel("Tariff:");
-        tariffField = new JTextField(FIELD_WIDTH);
+        tariffField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         tariffField.setText(Double.toString(bill.EnergyTariff));
         tariffField.setEditable(false);
 
         // Create energy rate field
         JLabel energyRateLabel = new JLabel("Energy Rate:");
-        energyRateField = new JTextField(FIELD_WIDTH);
+        energyRateField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         energyRateField.setText(Double.toString(bill.EnergyRate));
         energyRateField.setEditable(false);
 
         // Create energy used field
         JLabel energyUsedLabel = new JLabel("Energy Used:");
-        energyUsedField = new JTextField(FIELD_WIDTH);
+        energyUsedField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         energyUsedField.setText(Double.toString(bill.EnergyUsed));
         energyUsedField.setEditable(false);
 
         // Create the amount due field
         JLabel amountDueLabel = new JLabel("Amount Due:");
-        amountDueField = new JTextField(FIELD_WIDTH);
+        amountDueField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         amountDueField.setText(Double.toString(bill.AmountDue));
         amountDueField.setEditable(false);
 
         // Create amount received field
         JLabel amountReceivedLabel = new JLabel("Amount Received:");
-        amountReceivedField = new JTextField(FIELD_WIDTH);
+        amountReceivedField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         amountReceivedField.setText(Double.toString(bill.AmountReceived));
         amountReceivedField.setEditable(false);
 
         // Create the amount they want to add field
         JLabel amountToPayLabel = new JLabel("Payment Amount:");
-        paymentAmountField = new JTextField(FIELD_WIDTH);
+        paymentAmountField = new JTextField(Constants.TEXT_FIELD_WIDTH);
 
+        // Create the panel with the grid bag layout
         JPanel informationDisplayPanel = new JPanel();
         informationDisplayPanel.setLayout(new GridBagLayout());
 
@@ -248,6 +247,7 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
         return informationDisplayPanel;
     }
 
+    // Route the button clicked to the correct action
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
@@ -255,17 +255,21 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
             new CustomerSearchWindow(UserRepository.GetCustomers());
             dispose();
         } else if (e.getSource() == createButton) {
+            // Create the payment object to be added to a customer's bill in the database
             try {
+                // Retrieve the necessary information for the payment
                 int userId = customer.CustomerId;
                 int billId = bill.BillId;
                 double paymentAmount = Double.parseDouble(paymentAmountField.getText());
 
+                // Create the new payment object
                 Payment payment = new Payment(
                         userId,
                         billId,
                         -1,
                         paymentAmount);
 
+                // Try calling the database and adding this payment for a customer's bill
                 if (CustomerPaymentRepository.CreatePayment(payment)) {
                     JOptionPane.showMessageDialog(contentPane, "Payment success");
                     new BillsDashboardWindow(customer);

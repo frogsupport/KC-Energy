@@ -11,20 +11,20 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// View to add a bill for a customer
 public class AddBillWindow extends JFrame implements ActionListener {
-
     private JButton backButton, addBillButton;
     private JTextField nameField, phoneField, addressField,
             tariffField, energyRateField, meterField, energyUsedField, periodField;
     private Container contentPane;
-    private final int FIELD_WIDTH = 10;
     private Customer customer;
 
+    // View to add a bill for a customer
     public AddBillWindow(Customer selectedCustomer) {
-
+        // Initialize window and customer value
         customer = selectedCustomer;
         setTitle("KC Energy - Add Bill");
-        setSize(550, 400);
+        setSize(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -36,6 +36,7 @@ public class AddBillWindow extends JFrame implements ActionListener {
         addBillButton = new JButton("Add Bill");
         addBillButton.addActionListener(this);
 
+        // Set the layout elements of the content pane
         contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
         contentPane.add(backButton, BorderLayout.NORTH);
@@ -45,51 +46,53 @@ public class AddBillWindow extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    // Builds and returns the panel that displays the necessary fields to fill out for a bill
     public JPanel buildBillPanel() {
         // Create name field
         JLabel nameLabel = new JLabel("Name:");
-        nameField = new JTextField(FIELD_WIDTH);
+        nameField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         nameField.setText(customer.CustomerName);
         nameField.setEditable(false);
 
         // Create phone field
         JLabel phoneLabel = new JLabel("Phone Number:");
-        phoneField = new JTextField(FIELD_WIDTH);
+        phoneField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         phoneField.setText(customer.PhoneNumber);
         phoneField.setEditable(false);
 
         // Create address field
         JLabel addressLabel = new JLabel("Address:");
-        addressField = new JTextField(FIELD_WIDTH);
+        addressField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         addressField.setText(customer.CurrentAddress);
         addressField.setEditable(false);
 
         // Create tariff field
         JLabel tariffLabel = new JLabel("Tariff:");
-        tariffField = new JTextField(FIELD_WIDTH);
+        tariffField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         tariffField.setText(Double.toString(customer.CurrentTariff));
         tariffField.setEditable(false);
 
         // Create energy rate field
         JLabel energyRateLabel = new JLabel("Energy Rate:");
-        energyRateField = new JTextField(FIELD_WIDTH);
+        energyRateField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         energyRateField.setText(Double.toString(customer.CurrentEnergyRate));
         energyRateField.setEditable(false);
 
         // Create meter type field
         JLabel meterLabel = new JLabel("Meter Type:");
-        meterField = new JTextField(FIELD_WIDTH);
+        meterField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         meterField.setText(customer.MeterType);
         meterField.setEditable(false);
 
         // Create energy used field
         JLabel energyUsedLabel = new JLabel("Energy Used:");
-        energyUsedField = new JTextField(FIELD_WIDTH);
+        energyUsedField = new JTextField(Constants.TEXT_FIELD_WIDTH);
 
         // Create the billing period field
         JLabel periodLabel = new JLabel("Billing Period:");
-        periodField = new JTextField(FIELD_WIDTH);
+        periodField = new JTextField(Constants.TEXT_FIELD_WIDTH);
 
+        // Create the panel and set the grid bag layout
         JPanel userDisplayPanel = new JPanel();
         userDisplayPanel.setLayout(new GridBagLayout());
 
@@ -148,6 +151,7 @@ public class AddBillWindow extends JFrame implements ActionListener {
         return userDisplayPanel;
     }
 
+    // Route each button selected to the correct functionalityh
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
@@ -155,7 +159,9 @@ public class AddBillWindow extends JFrame implements ActionListener {
             new CustomerSearchWindow(UserRepository.GetCustomers());
             dispose();
         } else if (e.getSource() == addBillButton) {
+            // Add a bill for a customer
             try {
+                // Get all the necessary values for the monthly bill object
                 int userId = customer.CustomerId;
                 double tariff = Double.parseDouble(tariffField.getText());
                 double energyUsed = Double.parseDouble(energyUsedField.getText());
@@ -166,6 +172,7 @@ public class AddBillWindow extends JFrame implements ActionListener {
                 String address = addressField.getText();
                 String period = periodField.getText();
 
+                // Create a new monthly bill object
                 MonthlyBill newBill = new MonthlyBill(
                         -1,
                         userId,
@@ -178,8 +185,11 @@ public class AddBillWindow extends JFrame implements ActionListener {
                         period,
                         address);
 
+                // Call the database and add this bill for the customer
                 if (MonthlyBillsRepository.AddBill(newBill)) {
                     JOptionPane.showMessageDialog(contentPane, "Bill successfully created");
+
+                    // Route to the customer search window on completion
                     new CustomerSearchWindow(UserRepository.GetCustomers());
                     dispose();
                 }

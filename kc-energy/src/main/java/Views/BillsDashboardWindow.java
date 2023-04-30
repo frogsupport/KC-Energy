@@ -22,16 +22,15 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
     private JTextField nameField, phoneField, addressField, tariffField, energyRateField, meterField;
     private DefaultTableModel billsTableModel;
     private ArrayList<MonthlyBill> bills;
-    JList<String> billsJList;
+    private JList<String> billsJList;
     private JTable billsJTable;
     private String[] billsArray;
-    private final int FIELD_WIDTH = 10;
 
     public BillsDashboardWindow(Customer selectedCustomer) {
         customer = selectedCustomer;
 
         setTitle("KC Energy - View Customer");
-        setSize(550, 400);
+        setSize(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -96,37 +95,37 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
 
         // Create name field
         JLabel nameLabel = new JLabel("Name:");
-        nameField = new JTextField(FIELD_WIDTH);
+        nameField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         nameField.setText(customer.CustomerName);
         nameField.setEditable(false);
 
         // Create phone field
         JLabel phoneLabel = new JLabel("Phone Number:");
-        phoneField = new JTextField(FIELD_WIDTH);
+        phoneField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         phoneField.setText(customer.PhoneNumber);
         phoneField.setEditable(false);
 
         // Create address field
         JLabel addressLabel = new JLabel("Address:");
-        addressField = new JTextField(FIELD_WIDTH);
+        addressField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         addressField.setText(customer.CurrentAddress);
         addressField.setEditable(false);
 
         // Create tariff field
         JLabel tariffLabel = new JLabel("Tariff:");
-        tariffField = new JTextField(FIELD_WIDTH);
+        tariffField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         tariffField.setText(Double.toString(customer.CurrentTariff));
         tariffField.setEditable(false);
 
         // Create energy rate field
         JLabel energyRateLabel = new JLabel("Energy Rate:");
-        energyRateField = new JTextField(FIELD_WIDTH);
+        energyRateField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         energyRateField.setText(Double.toString(customer.CurrentEnergyRate));
         energyRateField.setEditable(false);
 
         // Create meter type field
         JLabel meterLabel = new JLabel("Meter Type:");
-        meterField = new JTextField(FIELD_WIDTH);
+        meterField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         meterField.setText(customer.MeterType);
         meterField.setEditable(false);
 
@@ -200,6 +199,7 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         return userDisplayPanel;
     }
 
+    // Returns the bottom panel and its buttons
     public JPanel buildBottomPanel() {
         // Create the Add Bill button
         addBillButton = new JButton("Add Bill");
@@ -235,6 +235,7 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         return bottomPanel;
     }
 
+    // Route the button clicked to the correct action
     @Override
     public void actionPerformed(ActionEvent e) {
         // Get the selected customer if selected
@@ -243,7 +244,6 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
             selectedBill = bills.get(billsJTable.getSelectedRow());
         }
 
-        // Code to return to previous page
         if (e.getSource() == backButton) {
             new CustomerSearchWindow(UserRepository.GetCustomers());
             dispose();
@@ -263,6 +263,7 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         }
     }
 
+    // Customer deletion
     public void deleteCustomer(int customerId) {
         if (UserRepository.DeleteCustomer(customerId)) {
             JOptionPane.showMessageDialog(contentPane, "Customer successfully deleted");

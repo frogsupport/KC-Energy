@@ -7,18 +7,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// View for editing a customer
 public class EditUserWindow extends JFrame implements ActionListener {
-
     private Customer customer;
     private JButton backButton, createButton;
     private JTextField nameField, phoneField, addressField, tariffField, energyRateField, meterField;
     private Container contentPane;
 
+    // View for editing a customer
     public EditUserWindow(Customer selectedCustomer) {
+        // Initialize the selected customer
         customer = selectedCustomer;
 
+        // Initialize the window
         setTitle("KC Energy - Edit Customer");
-        setSize(550, 400);
+        setSize(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -40,11 +43,12 @@ public class EditUserWindow extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    // Build and return the panel with the customer information that the user can edit
     public JPanel buildEditUserWindow() {
         // Create name field
         JPanel namePanel = new JPanel();
         JLabel nameLabel = new JLabel("Name:");
-        nameField = new JTextField(20);
+        nameField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         nameField.setText(customer.CustomerName);
         namePanel.add(nameLabel);
         namePanel.add(nameField);
@@ -52,7 +56,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
         // Create phone field
         JPanel phonePanel = new JPanel();
         JLabel phoneLabel = new JLabel("Phone Number:");
-        phoneField = new JTextField(20);
+        phoneField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         phoneField.setText(customer.PhoneNumber);
         phonePanel.add(phoneLabel);
         phonePanel.add(phoneField);
@@ -60,7 +64,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
         // Create address field
         JPanel addressPanel = new JPanel();
         JLabel addressLabel = new JLabel("Address:");
-        addressField = new JTextField(20);
+        addressField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         addressField.setText(customer.CurrentAddress);
         addressPanel.add(addressLabel);
         addressPanel.add(addressField);
@@ -68,7 +72,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
         // Create tariff field
         JPanel tariffPanel = new JPanel();
         JLabel tariffLabel = new JLabel("Tariff:");
-        tariffField = new JTextField(20);
+        tariffField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         tariffField.setText(Double.toString(customer.CurrentTariff));
         tariffPanel.add(tariffLabel);
         tariffPanel.add(tariffField);
@@ -76,7 +80,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
         // Create energy rate field
         JPanel energyRatePanel = new JPanel();
         JLabel energyRateLabel = new JLabel("Energy Rate:");
-        energyRateField = new JTextField(20);
+        energyRateField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         energyRateField.setText(Double.toString(customer.CurrentEnergyRate));
         energyRatePanel.add(energyRateLabel);
         energyRatePanel.add(energyRateField);
@@ -84,7 +88,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
         // Create meter type field
         JPanel meterPanel = new JPanel();
         JLabel meterLabel = new JLabel("Meter Type:");
-        meterField = new JTextField(20);
+        meterField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         meterField.setText(customer.MeterType);
         meterPanel.add(meterLabel);
         meterPanel.add(meterField);
@@ -143,6 +147,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
         return editUserPanel;
     }
 
+    // Route the button clicked to the correct action
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
@@ -151,6 +156,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
             dispose();
         } else if (e.getSource() == createButton) {
             try {
+                // Get the data from the fields for the customer
                 String name = nameField.getText();
                 String phone = phoneField.getText();
                 String address = addressField.getText();
@@ -158,6 +164,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
                 double energyRate = Double.parseDouble(energyRateField.getText());
                 String meterType = meterField.getText();
 
+                // Create the new customer object
                 Customer updatedCustomer = new Customer(
                         customer.CustomerId,
                         name,
@@ -167,6 +174,7 @@ public class EditUserWindow extends JFrame implements ActionListener {
                         energyRate,
                         meterType);
 
+                // Try calling the database and updating the customer
                 if (UserRepository.UpdateCustomer(updatedCustomer)) {
                     JOptionPane.showMessageDialog(contentPane, "Customer successfully updated");
                     new CustomerSearchWindow(UserRepository.GetCustomers());

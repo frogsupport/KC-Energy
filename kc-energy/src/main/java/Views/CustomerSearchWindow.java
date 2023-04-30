@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import static DataAccess.UserRepository.GetCustomers;
 import static DataAccess.UserRepository.GetCustomersByName;
 
+// The customer search window is the launching point of the application
 public class CustomerSearchWindow extends JFrame implements ActionListener {
-
     private JButton createButton, searchButton, viewButton, editButton, deleteButton;
     private JTextField searchField;
     private JList<String> customerJList;
@@ -22,24 +22,25 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
     private String[] customersArray;
     private DefaultTableModel customerTableModel;
     private JTable customerTable;
-    Container contentPane;
+    private Container contentPane;
 
+    // The customer search window is the launching point of the application
     public CustomerSearchWindow(ArrayList<Customer> customers) {
         this.customers = customers;
         setTitle("KC Energy - Search Customers");
-        setSize(550, 400);
+        setSize(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create search bar and button
         JPanel searchPanel = new JPanel();
-        searchField = new JTextField(20);
+        searchField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         searchButton = new JButton("Search");
         searchButton.addActionListener(this);
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
 
-        // Create user list
+        // Create user list table column names
         String[] column_names =
                 {
                         "Name",
@@ -47,6 +48,7 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
                         "Address"
                 };
 
+        // Make the cells uneditable in the table
         customerTableModel = new DefaultTableModel(column_names, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -55,19 +57,21 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
             }
         };
 
+        // Set up a customer array with the string of the customer object so we can
+        // represent customers in the table UI
         customersArray = new String[customers.size()];
         for (int i = 0; i < customers.size(); i++) {
             customersArray[i] = customers.get(i).toString();
             customerTableModel.addRow(customers.get(i).getRow());
         }
 
+        // Set up the overall scroll pane component that will be shown
         customerJList = new JList<>(customersArray);
         customerTable = new JTable(customerTableModel);
         customerTable.setSelectionMode(0);
         JScrollPane scrollPane = new JScrollPane(customerTable);
 
-        // Create bottom buttons
-        JPanel bottomPanel = new JPanel();
+        // Create bottom pane buttons
         createButton = new JButton("Create Customer");
         createButton.addActionListener(this);
         viewButton = new JButton("View Customer");
@@ -76,6 +80,9 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
         editButton.addActionListener(this);
         deleteButton = new JButton("Delete Customer");
         deleteButton.addActionListener(this);
+
+        // Add buttons to bottom panel
+        JPanel bottomPanel = new JPanel();
         bottomPanel.add(createButton);
         bottomPanel.add(viewButton);
         bottomPanel.add(editButton);
@@ -91,6 +98,7 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    // Event listeners for all the buttons on the page
     @Override
     public void actionPerformed(ActionEvent e) {
         // Get the selected customer if selected
@@ -100,11 +108,11 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
         }
 
         // Switch buttons
+        // Route to the correct functionality depending on the button clicked
         if (e.getSource() == createButton) {
             new CreateUserWindow();
             dispose();
         } else if ((e.getSource() == viewButton) && (selectedCustomer != null)) {
-            // Code to view selected user
             new BillsDashboardWindow(selectedCustomer);
             dispose();
         } else if ((e.getSource() == editButton) && (selectedCustomer != null)) {
@@ -121,6 +129,7 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
         }
     }
 
+    // Handle customer deletion
     public void deleteCustomer(int customerId) {
         if (UserRepository.DeleteCustomer(customerId)) {
             JOptionPane.showMessageDialog(contentPane, "Customer successfully deleted");
@@ -132,6 +141,7 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
         }
     }
 
+    // Launch method for the application
     public static void main(String[] args) {
         new CustomerSearchWindow(GetCustomers());
     }

@@ -8,15 +8,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// View for creating a new customer
 public class CreateUserWindow extends JFrame implements ActionListener {
-
     private JButton backButton, createButton;
     private JTextField nameField, phoneField, addressField, tariffField, energyRateField, meterField;
-    Container contentPane;
+    private Container contentPane;
 
+    // View for creating a new customer
     public CreateUserWindow() {
+        // Initialize the window
         setTitle("KC Energy - Create Customer");
-        setSize(550, 400);
+        setSize(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -28,39 +30,41 @@ public class CreateUserWindow extends JFrame implements ActionListener {
         createButton = new JButton("Create Customer");
         createButton.addActionListener(this);
 
+        // Set the content pane and its components
         contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
         contentPane.add(backButton, BorderLayout.NORTH);
-        contentPane.add(buildcreateUserWindow(), BorderLayout.CENTER);
+        contentPane.add(buildCreateUserWindow(), BorderLayout.CENTER);
         contentPane.add(createButton, BorderLayout.SOUTH);
 
         setVisible(true);
     }
 
-    public JPanel buildcreateUserWindow() {
+    // Build and return the panel that has the necessary fields for customer creation
+    public JPanel buildCreateUserWindow() {
         // Create name field
         JLabel nameLabel = new JLabel("Name:");
-        nameField = new JTextField(20);
+        nameField = new JTextField(Constants.TEXT_FIELD_WIDTH);
 
         // Create phone field
         JLabel phoneLabel = new JLabel("Phone Number:");
-        phoneField = new JTextField(20);
+        phoneField = new JTextField(Constants.TEXT_FIELD_WIDTH);
 
         // Create address field
         JLabel addressLabel = new JLabel("Address:");
-        addressField = new JTextField(20);
+        addressField = new JTextField(Constants.TEXT_FIELD_WIDTH);
 
         // Create tariff field
         JLabel tariffLabel = new JLabel("Tariff:");
-        tariffField = new JTextField(20);
+        tariffField = new JTextField(Constants.TEXT_FIELD_WIDTH);
 
         // Create energy rate field
         JLabel energyRateLabel = new JLabel("Energy Rate:");
-        energyRateField = new JTextField(20);
+        energyRateField = new JTextField(Constants.TEXT_FIELD_WIDTH);
 
         // Create meter type field
         JLabel meterLabel = new JLabel("Meter Type:");
-        meterField = new JTextField(20);
+        meterField = new JTextField(Constants.TEXT_FIELD_WIDTH);
 
         JPanel createUserPanel = new JPanel();
         createUserPanel.setLayout(new GridBagLayout());
@@ -116,6 +120,7 @@ public class CreateUserWindow extends JFrame implements ActionListener {
         return createUserPanel;
     }
 
+    // Route the button clicked to the correct action
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
@@ -124,6 +129,7 @@ public class CreateUserWindow extends JFrame implements ActionListener {
             dispose();
         } else if (e.getSource() == createButton) {
             try {
+                // Get all the necessary field information for the customer to create
                 String name = nameField.getText();
                 String phone = phoneField.getText();
                 String address = addressField.getText();
@@ -131,6 +137,7 @@ public class CreateUserWindow extends JFrame implements ActionListener {
                 double energyRate = Double.parseDouble(energyRateField.getText());
                 String meterType = meterField.getText();
 
+                // Create the new customer object
                 Customer newCustomer = new Customer(
                         -1,
                         name,
@@ -140,6 +147,7 @@ public class CreateUserWindow extends JFrame implements ActionListener {
                         energyRate,
                         meterType);
 
+                // Try calling the database and appending the new customer
                  if (UserRepository.CreateCustomer(newCustomer)) {
                      JOptionPane.showMessageDialog(contentPane, "Customer successfully created");
                      new CustomerSearchWindow(UserRepository.GetCustomers());
