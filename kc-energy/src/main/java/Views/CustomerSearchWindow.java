@@ -83,8 +83,8 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
 
         // Add buttons to bottom panel
         JPanel bottomPanel = new JPanel();
-        bottomPanel.add(createButton);
         bottomPanel.add(viewButton);
+        bottomPanel.add(createButton);
         bottomPanel.add(editButton);
         bottomPanel.add(deleteButton);
 
@@ -110,7 +110,7 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
         // Switch buttons
         // Route to the correct functionality depending on the button clicked
         if (e.getSource() == createButton) {
-            new CreateUserWindow();
+            new AddCustomerWindow();
             dispose();
         } else if ((e.getSource() == viewButton) && (selectedCustomer != null)) {
             new BillsDashboardWindow(selectedCustomer);

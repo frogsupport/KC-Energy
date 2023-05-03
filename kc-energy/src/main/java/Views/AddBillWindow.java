@@ -7,15 +7,18 @@ import Models.Customer;
 import Models.MonthlyBill;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 // View to add a bill for a customer
 public class AddBillWindow extends JFrame implements ActionListener {
     private JButton backButton, addBillButton;
     private JTextField nameField, phoneField, addressField,
-            tariffField, energyRateField, meterField, energyUsedField, periodField;
+            tariffField, energyRateField, meterField, energyUsedField;
+    private JComboBox periodComboBox;
     private Container contentPane;
     private Customer customer;
 
@@ -28,20 +31,34 @@ public class AddBillWindow extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // Title for the pane
+        JPanel topPanel = new JPanel();
+        topPanel.setBorder(new EmptyBorder(30,0,0,0));
+        JLabel addBillLabel = new JLabel("Add Bill Form");
+        addBillLabel.setFont(Constants.TITLE_FONT_LARGE);
+        topPanel.add(addBillLabel);
+
         // Create return button
-        backButton = new JButton("Return to Dashboard");
+        backButton = new JButton("Return to Previous Page");
         backButton.addActionListener(this);
+        backButton.setFocusPainted(false);
 
         // Create the create button
         addBillButton = new JButton("Add Bill");
         addBillButton.addActionListener(this);
 
+        // Create bottom panel and add buttons
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setBorder(new EmptyBorder(0, 0, 30, 0));
+        bottomPanel.add(backButton);
+        bottomPanel.add(addBillButton);
+
         // Set the layout elements of the content pane
         contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
-        contentPane.add(backButton, BorderLayout.NORTH);
+        contentPane.add(topPanel, BorderLayout.NORTH);
         contentPane.add(buildBillPanel(), BorderLayout.CENTER);
-        contentPane.add(addBillButton, BorderLayout.SOUTH);
+        contentPane.add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -85,12 +102,12 @@ public class AddBillWindow extends JFrame implements ActionListener {
         meterField.setEditable(false);
 
         // Create energy used field
-        JLabel energyUsedLabel = new JLabel("Energy Used:");
+        JLabel energyUsedLabel = new JLabel("Energy Used (hours):");
         energyUsedField = new JTextField(Constants.TEXT_FIELD_WIDTH);
 
         // Create the billing period field
         JLabel periodLabel = new JLabel("Billing Period:");
-        periodField = new JTextField(Constants.TEXT_FIELD_WIDTH);
+        periodComboBox = new JComboBox(Constants.PERIOD_OPTIONS);
 
         // Create the panel and set the grid bag layout
         JPanel userDisplayPanel = new JPanel();
@@ -146,17 +163,17 @@ public class AddBillWindow extends JFrame implements ActionListener {
         c.gridx = 2;
         userDisplayPanel.add(periodLabel, c);
         c.gridx = 3;
-        userDisplayPanel.add(periodField, c);
+        userDisplayPanel.add(periodComboBox, c);
 
         return userDisplayPanel;
     }
 
-    // Route each button selected to the correct functionalityh
+    // Route each button selected to the correct functionality
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             // Code to return to previous page
-            new CustomerSearchWindow(UserRepository.GetCustomers());
+            new BillsDashboardWindow(customer);
             dispose();
         } else if (e.getSource() == addBillButton) {
             // Add a bill for a customer
@@ -170,7 +187,7 @@ public class AddBillWindow extends JFrame implements ActionListener {
                 double amountDue = energyUsed * energyRate * (1 + tariff);
                 String meterType = meterField.getText();
                 String address = addressField.getText();
-                String period = periodField.getText();
+                String period = Objects.requireNonNull(periodComboBox.getSelectedItem()).toString();
 
                 // Create a new monthly bill object
                 MonthlyBill newBill = new MonthlyBill(
@@ -190,7 +207,7 @@ public class AddBillWindow extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(contentPane, "Bill successfully created");
 
                     // Route to the customer search window on completion
-                    new CustomerSearchWindow(UserRepository.GetCustomers());
+                    new BillsDashboardWindow(customer);
                     dispose();
                 }
             }

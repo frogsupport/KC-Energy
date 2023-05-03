@@ -3,15 +3,20 @@ import DataAccess.UserRepository;
 import Models.Customer;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Objects;
 
 // View for editing a customer
 public class EditUserWindow extends JFrame implements ActionListener {
     private Customer customer;
     private JButton backButton, createButton;
-    private JTextField nameField, phoneField, addressField, tariffField, energyRateField, meterField;
+    private JTextField nameField, phoneField, addressField;
+    private JComboBox meterComboBox, tariffComboBox, energyRateComboBox;
     private Container contentPane;
 
     // View for editing a customer
@@ -25,20 +30,33 @@ public class EditUserWindow extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // Title for the pane
+        JPanel topPanel = new JPanel();
+        topPanel.setBorder(new EmptyBorder(30,0,0,0));
+        JLabel editUserLabel = new JLabel("Edit User Form");
+        editUserLabel.setFont(Constants.TITLE_FONT_LARGE);
+        topPanel.add(editUserLabel);
+
         // Create return button
-        backButton = new JButton("Return to Dashbaord");
+        backButton = new JButton("Return to Search Page");
         backButton.addActionListener(this);
 
         // Create the create button
         createButton = new JButton("Save");
         createButton.addActionListener(this);
 
+        // Create bottom panel and add buttons
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setBorder(new EmptyBorder(0, 0, 30, 0));
+        bottomPanel.add(backButton);
+        bottomPanel.add(createButton);
+
         // Add components to window
         contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
-        contentPane.add(backButton, BorderLayout.NORTH);
+        contentPane.add(topPanel, BorderLayout.NORTH);
         contentPane.add(buildEditUserWindow(), BorderLayout.CENTER);
-        contentPane.add(createButton, BorderLayout.SOUTH);
+        contentPane.add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -46,52 +64,34 @@ public class EditUserWindow extends JFrame implements ActionListener {
     // Build and return the panel with the customer information that the user can edit
     public JPanel buildEditUserWindow() {
         // Create name field
-        JPanel namePanel = new JPanel();
         JLabel nameLabel = new JLabel("Name:");
         nameField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         nameField.setText(customer.CustomerName);
-        namePanel.add(nameLabel);
-        namePanel.add(nameField);
 
         // Create phone field
-        JPanel phonePanel = new JPanel();
         JLabel phoneLabel = new JLabel("Phone Number:");
         phoneField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         phoneField.setText(customer.PhoneNumber);
-        phonePanel.add(phoneLabel);
-        phonePanel.add(phoneField);
 
         // Create address field
-        JPanel addressPanel = new JPanel();
         JLabel addressLabel = new JLabel("Address:");
         addressField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         addressField.setText(customer.CurrentAddress);
-        addressPanel.add(addressLabel);
-        addressPanel.add(addressField);
 
         // Create tariff field
-        JPanel tariffPanel = new JPanel();
         JLabel tariffLabel = new JLabel("Tariff:");
-        tariffField = new JTextField(Constants.TEXT_FIELD_WIDTH);
-        tariffField.setText(Double.toString(customer.CurrentTariff));
-        tariffPanel.add(tariffLabel);
-        tariffPanel.add(tariffField);
+        tariffComboBox = new JComboBox(Constants.TARIFF_OPTIONS);
+        tariffComboBox.setSelectedIndex(0);
 
         // Create energy rate field
-        JPanel energyRatePanel = new JPanel();
         JLabel energyRateLabel = new JLabel("Energy Rate:");
-        energyRateField = new JTextField(Constants.TEXT_FIELD_WIDTH);
-        energyRateField.setText(Double.toString(customer.CurrentEnergyRate));
-        energyRatePanel.add(energyRateLabel);
-        energyRatePanel.add(energyRateField);
+        energyRateComboBox = new JComboBox(Constants.ENERGY_RATE_OPTIONS);
+        energyRateComboBox.setSelectedIndex(0);
 
         // Create meter type field
-        JPanel meterPanel = new JPanel();
         JLabel meterLabel = new JLabel("Meter Type:");
-        meterField = new JTextField(Constants.TEXT_FIELD_WIDTH);
-        meterField.setText(customer.MeterType);
-        meterPanel.add(meterLabel);
-        meterPanel.add(meterField);
+        meterComboBox = new JComboBox(Constants.METER_OPTIONS);
+        meterComboBox.setSelectedIndex(0);
 
         JPanel editUserPanel = new JPanel();
         editUserPanel.setLayout(new GridBagLayout());
@@ -128,21 +128,21 @@ public class EditUserWindow extends JFrame implements ActionListener {
         c.gridx = 0;
         editUserPanel.add(meterLabel, c);
         c.gridx = 1;
-        editUserPanel.add(meterField, c);
+        editUserPanel.add(meterComboBox, c);
 
         // row 4
         c.gridy = 4;
         c.gridx = 0;
         editUserPanel.add(energyRateLabel, c);
         c.gridx = 1;
-        editUserPanel.add(energyRateField, c);
+        editUserPanel.add(energyRateComboBox, c);
 
         // row 5
         c.gridy = 5;
         c.gridx = 0;
         editUserPanel.add(tariffLabel, c);
         c.gridx = 1;
-        editUserPanel.add(tariffField, c);
+        editUserPanel.add(tariffComboBox, c);
 
         return editUserPanel;
     }
@@ -160,9 +160,9 @@ public class EditUserWindow extends JFrame implements ActionListener {
                 String name = nameField.getText();
                 String phone = phoneField.getText();
                 String address = addressField.getText();
-                double tariff = Double.parseDouble(tariffField.getText());
-                double energyRate = Double.parseDouble(energyRateField.getText());
-                String meterType = meterField.getText();
+                double tariff = Double.parseDouble(Objects.requireNonNull(tariffComboBox.getSelectedItem()).toString());
+                double energyRate = Double.parseDouble(Objects.requireNonNull(energyRateComboBox.getSelectedItem()).toString());
+                String meterType = Objects.requireNonNull(meterComboBox.getSelectedItem()).toString();
 
                 // Create the new customer object
                 Customer updatedCustomer = new Customer(

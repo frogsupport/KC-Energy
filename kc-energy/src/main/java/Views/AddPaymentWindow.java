@@ -7,6 +7,7 @@ import Models.MonthlyBill;
 import Models.Payment;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,7 +26,7 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
 
     // View to add a payment for a customer
     public AddPaymentWindow(Customer selectedCustomer, MonthlyBill selectedBill) {
-        // Initialize the selcted customer and bill
+        // Initialize the selected customer and bill
         customer = selectedCustomer;
         bill = selectedBill;
 
@@ -35,20 +36,33 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // Title for the pane
+        JPanel topPanel = new JPanel();
+        topPanel.setBorder(new EmptyBorder(30,0,0,0));
+        JLabel addPaymentLabel = new JLabel("Add Payment Form");
+        addPaymentLabel.setFont(Constants.TITLE_FONT_LARGE);
+        topPanel.add(addPaymentLabel);
+
         // Create return button
-        backButton = new JButton("Return to Dashboard");
+        backButton = new JButton("Return to Previous Page");
         backButton.addActionListener(this);
 
         // Create the create button
         createButton = new JButton("Add Payment");
         createButton.addActionListener(this);
 
+        // Create bottom panel and add buttons
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setBorder(new EmptyBorder(0, 0, 30, 0));
+        bottomPanel.add(backButton);
+        bottomPanel.add(createButton);
+
         // Set the content pane components
         contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
-        contentPane.add(backButton, BorderLayout.NORTH);
+        contentPane.add(topPanel, BorderLayout.NORTH);
         contentPane.add(buildPaymentInformationDisplayPanel(), BorderLayout.CENTER);
-        contentPane.add(createButton, BorderLayout.SOUTH);
+        contentPane.add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -57,6 +71,11 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
     public JPanel buildPaymentInformationDisplayPanel() {
         // Create Customer Information Label
         JLabel customerInformationLabel = new JLabel("Customer Information:");
+        customerInformationLabel.setFont(Constants.TITLE_FONT_MEDIUM);
+
+        // Create Bills Table Label
+        JLabel billsTableLabel = new JLabel("Bill Information:");
+        billsTableLabel.setFont(Constants.TITLE_FONT_MEDIUM);
 
         // Create name field
         JLabel nameLabel = new JLabel("Name:");
@@ -93,9 +112,6 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
         currentMeterField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         currentMeterField.setText(customer.MeterType);
         currentMeterField.setEditable(false);
-
-        // Create Bills Table Label
-        JLabel billsTableLabel = new JLabel("Bill Information:");
 
         // Create meter type field
         JLabel billMeterLabel = new JLabel("Meter Type:");
@@ -191,7 +207,7 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
         informationDisplayPanel.add(currentMeterField, c);
 
         // row 4
-        c.insets = new Insets(10, 2, 10, 2);
+        c.insets = new Insets(30, 2, 10, 2);
         c.gridy = 4;
         c.gridx = 0;
         informationDisplayPanel.add(billsTableLabel, c);
@@ -238,6 +254,7 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
         informationDisplayPanel.add(amountReceivedField, c);
 
         // row 9
+        c.insets = new Insets(40, 2, 2, 2);
         c.gridy = 9;
         c.gridx = 0;
         informationDisplayPanel.add(amountToPayLabel, c);
@@ -252,7 +269,7 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == backButton) {
             // Code to return to previous page
-            new CustomerSearchWindow(UserRepository.GetCustomers());
+            new BillsDashboardWindow(customer);
             dispose();
         } else if (e.getSource() == createButton) {
             // Create the payment object to be added to a customer's bill in the database
