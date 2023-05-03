@@ -34,9 +34,11 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
 
         // Create search bar and button
         JPanel searchPanel = new JPanel();
+        JLabel searchLabel = new JLabel("Customer Search: ");
         searchField = new JTextField(Constants.TEXT_FIELD_WIDTH);
         searchButton = new JButton("Search");
         searchButton.addActionListener(this);
+        searchPanel.add(searchLabel);
         searchPanel.add(searchField);
         searchPanel.add(searchButton);
 
