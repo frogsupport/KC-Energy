@@ -157,6 +157,7 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
 
         // Create the amount they want to add field
         JLabel amountToPayLabel = new JLabel("Payment Amount:");
+        amountToPayLabel.setFont(Constants.TITLE_FONT_MEDIUM);
         paymentAmountField = new JTextField(Constants.TEXT_FIELD_WIDTH);
 
         // Create the panel with the grid bag layout
@@ -167,7 +168,7 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
         GridBagConstraints c = new GridBagConstraints();
 
         // row 0
-        c.insets = new Insets(10, 2, 10, 2);
+        c.insets = new Insets(5, 2, 10, 2);
         c.gridy = 0;
         c.gridx = 0;
         informationDisplayPanel.add(customerInformationLabel, c);
@@ -254,7 +255,7 @@ public class AddPaymentWindow extends JFrame implements ActionListener {
         informationDisplayPanel.add(amountReceivedField, c);
 
         // row 9
-        c.insets = new Insets(40, 2, 2, 2);
+        c.insets = new Insets(19, 2, 2, 2);
         c.gridy = 9;
         c.gridx = 0;
         informationDisplayPanel.add(amountToPayLabel, c);

@@ -153,18 +153,6 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         // creates a constraints object
         GridBagConstraints c = new GridBagConstraints();
 
-        // insets
-        c.insets = new Insets(15, 2, 2, 2);
-
-        // row 0
-//        c.gridy = 0;
-//        c.gridx = 0;
-//        userDisplayPanel.add(backButton, c);
-//        c.gridx = 1;
-//        userDisplayPanel.add(editButton, c);
-//        c.gridx = 2;
-//        userDisplayPanel.add(deleteButton, c);
-
         // Row 0
         c.insets = new Insets(20, 2, 10, 2);
         c.gridy = 0;

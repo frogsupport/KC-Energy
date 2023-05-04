@@ -9,7 +9,7 @@ public class Constants {
     public static final int WINDOW_WIDTH = 700;
 
     // The window height
-    public static final int WINDOW_HEIGHT = 550;
+    public static final int WINDOW_HEIGHT = 500;
 
     // The field width for text fields
     public static final int TEXT_FIELD_WIDTH = 20;

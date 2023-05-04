@@ -23,7 +23,7 @@ public class UserRepository {
 
             // prepare SQL query
             String query = String.format(
-                    "SELECT * FROM kc_energy.customer WHERE INSTR(customer_name, '%s') > 0;",
+                    "SELECT * FROM kc_energy.customer WHERE INSTR(customer_name, '%s') > 0 ORDER BY customer_name ASC;",
                     name);
 
             // send and execute SQL query in Database software
@@ -73,7 +73,7 @@ public class UserRepository {
             Statement statement = connection.createStatement();
 
             // prepare SQL query
-            String query = "SELECT * FROM kc_energy.customer;";
+            String query = "SELECT * FROM kc_energy.customer ORDER BY customer_name ASC;";
 
             // send and execute SQL query in Database software
             ResultSet result = statement.executeQuery(query);
