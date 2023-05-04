@@ -50,6 +50,46 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
                         "Address"
                 };
 
+        // Create bottom pane buttons
+        createButton = new JButton("Create Customer");
+        createButton.addActionListener(this);
+        viewButton = new JButton("View Customer");
+        viewButton.addActionListener(this);
+        editButton = new JButton("Edit Customer");
+        editButton.addActionListener(this);
+        deleteButton = new JButton("Delete Customer");
+        deleteButton.addActionListener(this);
+
+        // Add buttons to bottom panel
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.add(viewButton);
+        bottomPanel.add(createButton);
+        bottomPanel.add(editButton);
+        bottomPanel.add(deleteButton);
+
+        // Add components to window
+        contentPane = getContentPane();
+        contentPane.setLayout(new BorderLayout());
+        contentPane.add(searchPanel, BorderLayout.NORTH);
+        contentPane.add(buildCustomerTableScrollPane(), BorderLayout.CENTER);
+        contentPane.add(bottomPanel, BorderLayout.SOUTH);
+
+        setVisible(true);
+    }
+
+    // Builds the customer table scroll pane
+    public JScrollPane buildCustomerTableScrollPane() {
+        // Create the customer table panel
+        JPanel customerTablePanel = new JPanel();
+
+        // Create user list table column names
+        String[] column_names =
+                {
+                        "Name",
+                        "Phone Number",
+                        "Address"
+                };
+
         // Make the cells uneditable in the table
         customerTableModel = new DefaultTableModel(column_names, 0) {
             @Override
@@ -73,31 +113,7 @@ public class CustomerSearchWindow extends JFrame implements ActionListener {
         customerTable.setSelectionMode(0);
         JScrollPane scrollPane = new JScrollPane(customerTable);
 
-        // Create bottom pane buttons
-        createButton = new JButton("Create Customer");
-        createButton.addActionListener(this);
-        viewButton = new JButton("View Customer");
-        viewButton.addActionListener(this);
-        editButton = new JButton("Edit Customer");
-        editButton.addActionListener(this);
-        deleteButton = new JButton("Delete Customer");
-        deleteButton.addActionListener(this);
-
-        // Add buttons to bottom panel
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.add(viewButton);
-        bottomPanel.add(createButton);
-        bottomPanel.add(editButton);
-        bottomPanel.add(deleteButton);
-
-        // Add components to window
-        contentPane = getContentPane();
-        contentPane.setLayout(new BorderLayout());
-        contentPane.add(searchPanel, BorderLayout.NORTH);
-        contentPane.add(scrollPane, BorderLayout.CENTER);
-        contentPane.add(bottomPanel, BorderLayout.SOUTH);
-
-        setVisible(true);
+        return scrollPane;
     }
 
     // Event listeners for all the buttons on the page

@@ -1,0 +1,35 @@
+CREATE TABLE `customer` (
+  `customer_id` int NOT NULL AUTO_INCREMENT,
+  `customer_name` varchar(255) NOT NULL,
+  `phone_number` varchar(255) NOT NULL,
+  `current_address` varchar(255) NOT NULL,
+  `current_tariff` decimal(13,2) NOT NULL,
+  `current_energy_rate` decimal(13,2) NOT NULL,
+  `meter_type` varchar(255) NOT NULL,
+  PRIMARY KEY (`customer_id`),
+  UNIQUE KEY `customerId_UNIQUE` (`customer_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `customer_payment` (
+  `payment_id` int NOT NULL AUTO_INCREMENT,
+  `bill_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `payment_amount` decimal(13,2) NOT NULL,
+  PRIMARY KEY (`payment_id`),
+  UNIQUE KEY `idcustomer_payments_UNIQUE` (`payment_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `monthly_bill` (
+  `bill_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `energy_tariff` decimal(13,2) NOT NULL,
+  `energy_used` decimal(13,2) NOT NULL,
+  `amount_received` decimal(13,2) NOT NULL,
+  `energy_rate` decimal(13,2) NOT NULL,
+  `amount_due` decimal(13,2) NOT NULL,
+  `meter_type` varchar(255) NOT NULL,
+  `period` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  PRIMARY KEY (`bill_id`),
+  UNIQUE KEY `bill_id_UNIQUE` (`bill_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

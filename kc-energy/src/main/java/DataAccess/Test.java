@@ -8,6 +8,7 @@ import java.sql.Statement;
 
 import static DataAccess.DbConnection.dbCon;
 
+// Class for running database code for testing purposes
 public class Test {
     public static void main(String[] args) {
 

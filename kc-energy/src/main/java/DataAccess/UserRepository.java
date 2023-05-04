@@ -38,7 +38,6 @@ public class UserRepository {
                 double currentTariff = result.getDouble("current_tariff");
                 double currentEnergyRate = result.getDouble("current_energy_rate");
                 String meterType = result.getString("meter_type");
-                Date deletedDate = result.getDate("deleted_date");
 
                 Customer customer = new Customer(
                         customerId,
@@ -87,7 +86,6 @@ public class UserRepository {
                 double currentTariff = result.getDouble("current_tariff");
                 double currentEnergyRate = result.getDouble("current_energy_rate");
                 String meterType = result.getString("meter_type");
-                Date deletedDate = result.getDate("deleted_date");
 
                 Customer customer = new Customer(
                         customerId,
