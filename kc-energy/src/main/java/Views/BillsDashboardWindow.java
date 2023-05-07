@@ -19,7 +19,7 @@ import static DataAccess.MonthlyBillsRepository.GetCustomerBills;
 public class BillsDashboardWindow extends JFrame implements ActionListener {
 
     private JButton backButton, editButton,
-            addBillButton, viewBillButton,deleteButton, addPaymentButton;
+            addBillButton, viewBillButton, addPaymentButton;
     private Container contentPane;
     private Customer customer;
     private JTextField nameField, phoneField, addressField, tariffField, energyRateField, meterField;
@@ -213,10 +213,6 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         editButton = new JButton("Edit Customer");
         editButton.addActionListener(this);
 
-        // Create user delete button
-        deleteButton = new JButton("Delete Customer");
-        deleteButton.addActionListener(this);
-
         // Create the Add Bill button
         addBillButton = new JButton("Add Bill");
         addBillButton.addActionListener(this);
@@ -236,7 +232,6 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         bottomPanel.add(addPaymentButton);
         bottomPanel.add(viewBillButton);
         bottomPanel.add(editButton);
-        bottomPanel.add(deleteButton);
 
         return bottomPanel;
     }
@@ -259,25 +254,11 @@ public class BillsDashboardWindow extends JFrame implements ActionListener {
         } else if (e.getSource() == addBillButton) {
             new AddBillWindow(customer);
             dispose();
-        } else if (e.getSource() == deleteButton) {
-            deleteCustomer(customer.CustomerId);
         } else if ((e.getSource() == addPaymentButton) && (selectedBill != null)) {
             new AddPaymentWindow(customer, selectedBill);
             dispose();
         } else if ((e.getSource() == viewBillButton) && (selectedBill != null)) {
             JOptionPane.showMessageDialog(contentPane, selectedBill.printCustomerBill(customer));
-        }
-    }
-
-    // Customer deletion
-    public void deleteCustomer(int customerId) {
-        if (UserRepository.DeleteCustomer(customerId)) {
-            JOptionPane.showMessageDialog(contentPane, "Customer successfully deleted");
-            new CustomerSearchWindow(UserRepository.GetCustomers());
-            dispose();
-        }
-        else {
-            JOptionPane.showMessageDialog(contentPane, "Customer deletion failed");
         }
     }
 }
